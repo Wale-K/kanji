@@ -32,6 +32,7 @@ const Headings = styled.p`
   color: green;
   font-weight: bold;
   font-size: 1.2rem;
+  margin-top: 0.5rem;
 `;
 
 const CardThird = styled.div`
@@ -57,7 +58,7 @@ const ValuesContainer = styled.div`
 `;
 
 const Kanji = styled.p`
-  font-size: 10rem;
+  font-size: 7rem;
   margin: 0;
   text-align: center;
 `;
@@ -127,7 +128,7 @@ const KanjiCard = (props) => {
           <svg onClick={props.kanjiEnd}>{end}</svg>
           <svg onClick={props.randomKanji}>{random}</svg>
         </ControlsDiv>
-        <SubsectionDiv height="22%">
+        <SubsectionDiv height="28%">
           <Headings>Kunyomi</Headings>
 
           <ValuesContainer>

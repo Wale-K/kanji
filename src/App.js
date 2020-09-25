@@ -21,6 +21,7 @@ class App extends React.Component {
     toggleTestMode: true,
     selectedGrades: [1],
     gradeInUse: 1,
+    length: 0,
   };
 
   // generates a randomly selected kanji grade from current grades in operation.
@@ -85,25 +86,31 @@ class App extends React.Component {
     axios
       .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
       .then((response) => {
-        this.setState({
-          allKanji: response.data,
-          gradeInUse: gradeBeingUsed,
-        });
-        axios
-          .get(
-            `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
+        this.setState(
+          {
+            allKanji: response.data,
+            gradeInUse: gradeBeingUsed,
+            length: response.data.length,
+          },
+          console.log(
+            this.state.gradeInUse,
+            this.state.allKanji,
+            this.state.length
           )
-          .then((response) => {
-            this.setState({
-              currentKanji: response.data,
-              currentKanjiIndex: randomKanji,
-            });
-          });
+        );
       });
 
-    // this selects one of the grades currently in use, then it selects a kanji from that particular grade and renders it to the page.
-
     const randomKanji = Math.floor(Math.random() * this.state.allKanji.length);
+    console.log("RK:", randomKanji, this.state.allKanji.length);
+
+    axios
+      .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`)
+      .then((response) => {
+        this.setState({
+          currentKanji: response.data,
+          currentKanjiIndex: randomKanji,
+        });
+      });
   };
 
   // this generates the next kanji of the current grade in use.
@@ -315,3 +322,27 @@ class App extends React.Component {
 }
 
 export default App;
+
+// const gradeBeingUsed = this.generateGrade();
+
+//     axios
+//       .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
+//       .then((response) => {
+//         this.setState({
+//           allKanji: response.data,
+//           gradeInUse: gradeBeingUsed,
+//         });
+
+//     const randomKanji = Math.floor(Math.random() * this.state.allKanji.length);
+
+//         axios
+//           .get(
+//             `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
+//           )
+//           .then((response) => {
+//             this.setState({
+//               currentKanji: response.data,
+//               currentKanjiIndex: randomKanji,
+//             });
+//           });
+//       });
