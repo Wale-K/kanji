@@ -20,7 +20,7 @@ class App extends React.Component {
     cardToggle: true,
     toggleTestMode: true,
     selectedGrades: [1],
-    length: 0,
+    gradeInUse: 1,
   };
 
   // generates a randomly selected kanji grade from current grades in operation.
@@ -80,27 +80,30 @@ class App extends React.Component {
   };
 
   generateRandomKanjiFromCurrentGrade = () => {
+    const gradeBeingUsed = this.generateGrade();
+
     axios
-      .get(`https://kanjiapi.dev/v1/kanji/grade-${this.generateGrade()}`)
+      .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
       .then((response) => {
         this.setState({
           allKanji: response.data,
-          length: response.data.length,
+          gradeInUse: gradeBeingUsed,
         });
+        axios
+          .get(
+            `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
+          )
+          .then((response) => {
+            this.setState({
+              currentKanji: response.data,
+              currentKanjiIndex: randomKanji,
+            });
+          });
       });
 
     // this selects one of the grades currently in use, then it selects a kanji from that particular grade and renders it to the page.
 
     const randomKanji = Math.floor(Math.random() * this.state.allKanji.length);
-
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`)
-      .then((response) => {
-        this.setState({
-          currentKanji: response.data,
-          currentKanjiIndex: randomKanji,
-        });
-      });
   };
 
   // this generates the next kanji of the current grade in use.
@@ -150,6 +153,12 @@ class App extends React.Component {
 
   // this makes the currently displayed kanji jump to the start of the current grade.
   handleKanjiStart = () => {
+    axios
+      .get(`https://kanjiapi.dev/v1/kanji/grade-${this.state.gradeInUse}`)
+      .then((response) => {
+        this.setState({ allKanji: response.data });
+      });
+
     if (this.state.allKanji !== null) {
       axios
         .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[0]}`)
@@ -178,6 +187,7 @@ class App extends React.Component {
             currentKanjiIndex: this.state.allKanji.length - 1,
           });
         });
+
       console.log("clicked up");
     }
   };
@@ -282,7 +292,6 @@ class App extends React.Component {
             currentKanjiIndex={
               this.state.allKanji ? this.state.currentKanjiIndex : ""
             }
-            length={this.state.length}
           />
         </Card>
         <Card display={this.state.cardToggle ? "none" : "block"}>
@@ -306,75 +315,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// if (gradesValue === "All") {
-//   if (this.state.grades[7].gradeFlag === false) {
-//     this.setState(
-//       update(this.state, {
-//         grades: {
-//           [gradesValueIndex]: {
-//             $set: { gradeFlag: true, value: gradesValue, index: 7 },
-//           },
-//           [0]: {
-//             $set: { gradeFlag: false, value: "1", index: 0 },
-//           },
-//           [1]: {
-//             $set: { gradeFlag: false, value: "2", index: 1 },
-//           },
-//           [2]: {
-//             $set: { gradeFlag: false, value: "3", index: 2 },
-//           },
-//           [3]: {
-//             $set: { gradeFlag: false, value: "4", index: 3 },
-//           },
-//           [4]: {
-//             $set: { gradeFlag: false, value: "5", index: 4 },
-//           },
-//           [5]: {
-//             $set: { gradeFlag: false, value: "6", index: 5 },
-//           },
-//           [6]: {
-//             $set: { gradeFlag: false, value: "8", index: 6 },
-//           },
-//         },
-//       })
-//     );
-//     this.setState({ selectedGrades: ["1", "2", "3", "4", "5", "6", "8"] });
-//   }
-// } else {
-//   if (this.state.grades[gradesValueIndex].gradeFlag === true) {
-//     this.setState(
-//       update(this.state, {
-//         grades: {
-//           [gradesValueIndex]: {
-//             $set: {
-//               gradeFlag: false,
-//               value: gradesValue,
-//               index: gradesValueIndex,
-//             },
-//           },
-//           [7]: {
-//             $set: { gradeFlag: false, value: "All", index: 7 },
-//           },
-//         },
-//       })
-//     );
-//   } else {
-//     this.setState(
-//       update(this.state, {
-//         grades: {
-//           [gradesValueIndex]: {
-//             $set: {
-//               gradeFlag: true,
-//               value: gradesValue,
-//               index: gradesValueIndex,
-//             },
-//           },
-//           [7]: {
-//             $set: { gradeFlag: false, value: "All", index: 7 },
-//           },
-//         },
-//       })
-//     );
-//   }
-// }
