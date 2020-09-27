@@ -37,7 +37,7 @@ const Kanji = styled.p`
 `;
 
 const CardContainer = styled.div`
-  height: 92vh;
+  height: 91vh;
   margin: 2rem;
   display: flex;
   flex-direction: column;

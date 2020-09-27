@@ -40,6 +40,8 @@ class App extends React.Component {
           length: response.data.length,
         });
       });
+
+    document.addEventListener("keydown", this.handleKeyPresses);
   };
 
   // this sets the first kanji of the grade 1 kanji to be the currentKanji.
@@ -199,23 +201,23 @@ class App extends React.Component {
 
   // this toggles the grade you are currently viewing. You can only view one grade at a time.
 
-  toggleGrade = (grade) => {
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/grade-${grade}`)
-      .then((response) => {
-        this.setState({
-          allKanji: response.data,
-          length: response.data.length,
-        });
-      });
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[0]}`)
-      .then((response) => {
-        this.setState({
-          currentKanji: response.data,
-        });
-      });
-  };
+  // toggleGrade = (grade) => {
+  //   axios
+  //     .get(`https://kanjiapi.dev/v1/kanji/grade-${grade}`)
+  //     .then((response) => {
+  //       this.setState({
+  //         allKanji: response.data,
+  //         length: response.data.length,
+  //       });
+  //     });
+  //   axios
+  //     .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[0]}`)
+  //     .then((response) => {
+  //       this.setState({
+  //         currentKanji: response.data,
+  //       });
+  //     });
+  // };
 
   // WIP function that generates a random kanji and removes it from the
   // potential to be generated again once viewed. So you don't get repition of kanji.
@@ -224,7 +226,6 @@ class App extends React.Component {
     this.setState({
       searchInputValue: event.target.value,
     });
-    console.log(this.state.searchInputValue);
   };
 
   handleKanjiSearchSubmit = () => {
@@ -242,10 +243,9 @@ class App extends React.Component {
           `https://kanjiapi.dev/v1/kanji/grade-${this.state.currentKanji.grade}`
         )
         .then((response) => {
-          this.setState({
-            allKanji: response.data,
-            length: response.data.length,
-          });
+          this.setState((prevState) => ({
+            currentKanjiIndex: -1,
+          }));
         });
     }
   };
@@ -269,6 +269,39 @@ class App extends React.Component {
       this.setState({ toggleTestMode: false });
     } else {
       this.setState({ toggleTestMode: true });
+    }
+  };
+
+  handleKeyPresses = (event) => {
+    if (event.keyCode === 13) {
+      this.handleKanjiSearchSubmit();
+    }
+    if (event.keyCode === 38) {
+      this.handleKanjiStart();
+    }
+
+    if (event.keyCode === 40) {
+      this.handleKanjiEnd();
+    }
+
+    if (event.keyCode === 39) {
+      this.handleKanjiIncrement();
+    }
+
+    if (event.keyCode === 37) {
+      this.handleKanjiDecrement();
+    }
+
+    if (event.keyCode === 191) {
+      this.generateRandomKanjiFromCurrentGrade();
+    }
+
+    if (event.keyCode === 84) {
+      this.handleToggleCard();
+    }
+
+    if (event.keyCode === 82) {
+      this.handleToggleTestMode();
     }
   };
 

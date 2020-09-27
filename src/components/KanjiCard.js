@@ -11,7 +11,7 @@ import {
 
 const CardContainer = styled.div`
   display: flex;
-  height: 92vh;
+  height: 91vh;
   border: solid 1px #474747;
   margin: 2rem;
   button {
@@ -123,7 +123,9 @@ const KanjiCard = (props) => {
         <Headings>Kanji</Headings>
         <Kanji>{props.currentKanji.kanji}</Kanji>
         <ControlsDiv>
-          <svg onClick={props.kanjiStart}>{start}</svg>
+          <svg onkeypress={props.kanjiStart} onClick={props.kanjiStart}>
+            {start}
+          </svg>
           <svg onClick={props.decrementKanji}>{decrement}</svg>
           <svg onClick={props.incrementKanji}>{increment}</svg>
           <svg onClick={props.kanjiEnd}>{end}</svg>
