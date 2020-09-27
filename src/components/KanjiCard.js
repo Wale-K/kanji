@@ -116,8 +116,9 @@ const KanjiCard = (props) => {
     <CardContainer display="flex">
       <CardThird borderRight="solid 1px #474747">
         <TopBar>
-          {props.currentKanjiIndex + 1} of {props.allKanji.length} //{" "}
-          {props.currentKanji.grade}
+          {props.currentKanjiIndex + 1} of {props.allKanji.length}
+          {/* //{" "} */}
+          {/* {props.currentKanji.grade} */}
         </TopBar>
         <Headings>Kanji</Headings>
         <Kanji>{props.currentKanji.kanji}</Kanji>
@@ -215,13 +216,15 @@ const KanjiCard = (props) => {
           <Headings>Strokes</Headings>
           <p>{props.currentKanji.stroke_count}</p>
         </div>
-        <p> 1 -> 80 // 一 * 六</p>
-        <p>2 -> 160 // 引 * 話</p>
-        <p>3 -> 200 // 悪 * 和</p>
-        <p>4 -> 200 // 愛 * 録</p>
-        <p>5 -> 185 // 圧 * 領</p>
-        <p>6 -> 181 // 異 * 論</p>
-        <p>8 -> 1130 // 亜 * 頰</p>
+        {/* <div>
+          <p> 1 -> 80 // 一 * 六</p>
+          <p>2 -> 160 // 引 * 話</p>
+          <p>3 -> 200 // 悪 * 和</p>
+          <p>4 -> 200 // 愛 * 録</p>
+          <p>5 -> 185 // 圧 * 領</p>
+          <p>6 -> 181 // 異 * 論</p>
+          <p>8 -> 1130 // 亜 * 頰</p>
+        </div> */}
         <Bottom>
           <div>
             <input

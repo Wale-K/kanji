@@ -103,20 +103,20 @@ const TestCard = (props) => {
             <TestType
               onClick={props.handleToggleTestMode}
               backgroundColor={
-                props.toggleTestMode ? "rgba(255,77,77, 0.3)" : "rgb(255,77,77)"
-              }
-              color={props.toggleTestMode ? "#474747" : "white"}
-            >
-              Reading Test
-            </TestType>
-            <TestType
-              onClick={props.handleToggleTestMode}
-              backgroundColor={
                 props.toggleTestMode ? "rgb(255,77,77)" : "rgba(255,77,77, 0.3)"
               }
               color={props.toggleTestMode ? "white" : "#474747"}
             >
               Writing Test
+            </TestType>
+            <TestType
+              onClick={props.handleToggleTestMode}
+              backgroundColor={
+                props.toggleTestMode ? "rgba(255,77,77, 0.3)" : "rgb(255,77,77)"
+              }
+              color={props.toggleTestMode ? "#474747" : "white"}
+            >
+              Reading Test
             </TestType>
           </TestTypeContainer>
           <div>

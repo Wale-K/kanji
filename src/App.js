@@ -86,31 +86,29 @@ class App extends React.Component {
     axios
       .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
       .then((response) => {
-        this.setState(
-          {
-            allKanji: response.data,
-            gradeInUse: gradeBeingUsed,
-            length: response.data.length,
-          },
-          console.log(
-            this.state.gradeInUse,
-            this.state.allKanji,
-            this.state.length
-          )
-        );
-      });
-
-    const randomKanji = Math.floor(Math.random() * this.state.allKanji.length);
-    console.log("RK:", randomKanji, this.state.allKanji.length);
-
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`)
-      .then((response) => {
+        console.log("first:");
         this.setState({
-          currentKanji: response.data,
-          currentKanjiIndex: randomKanji,
+          allKanji: response.data,
+          gradeInUse: gradeBeingUsed,
+          length: response.data.length,
         });
+      })
+      .then(() => {
+        const randomKanji = Math.floor(
+          Math.random() * this.state.allKanji.length
+        );
+        axios
+          .get(
+            `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
+          )
+          .then((response) => {
+            this.setState({
+              currentKanji: response.data,
+              currentKanjiIndex: randomKanji,
+            });
+          });
       });
+    console.log("second");
   };
 
   // this generates the next kanji of the current grade in use.
@@ -322,27 +320,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// const gradeBeingUsed = this.generateGrade();
-
-//     axios
-//       .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
-//       .then((response) => {
-//         this.setState({
-//           allKanji: response.data,
-//           gradeInUse: gradeBeingUsed,
-//         });
-
-//     const randomKanji = Math.floor(Math.random() * this.state.allKanji.length);
-
-//         axios
-//           .get(
-//             `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
-//           )
-//           .then((response) => {
-//             this.setState({
-//               currentKanji: response.data,
-//               currentKanjiIndex: randomKanji,
-//             });
-//           });
-//       });
