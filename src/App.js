@@ -303,6 +303,40 @@ class App extends React.Component {
     if (event.keyCode === 82) {
       this.handleToggleTestMode();
     }
+
+    // TODO: Fix these so when you press the number on the keyboard the grade is toggled on/off.
+
+    // if (event.keyCode === 49) {
+    //   this.gradeOnOffSwitch(1);
+    // }
+
+    // if (event.keyCode === 50) {
+    //   this.gradeOnOffSwitch(2);
+    // }
+
+    // if (event.keyCode === 51) {
+    //   this.gradeOnOffSwitch(3);
+    // }
+
+    // if (event.keyCode === 52) {
+    //   this.gradeOnOffSwitch(4);
+    // }
+
+    // if (event.keyCode === 53) {
+    //   this.gradeOnOffSwitch(5);
+    // }
+
+    // if (event.keyCode === 54) {
+    //   this.gradeOnOffSwitch(6);
+    // }
+
+    // if (event.keyCode === 56) {
+    //   this.gradeOnOffSwitch(8);
+    // }
+
+    // if (event.keyCode === 48) {
+    //   this.gradeOnOffSwitch(0);
+    // }
   };
 
   render() {
