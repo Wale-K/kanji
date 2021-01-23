@@ -8,7 +8,7 @@ commands:
     description: This step will install the node packages.
     steps:
       - node/install-packages
-        cache-path: node-modules
+        cache-path: "node-modules"
   build-production:
     description: This will create a production build.
     steps:
