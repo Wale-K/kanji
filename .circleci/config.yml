@@ -19,10 +19,12 @@ commands:
   sync-to-bucket:
     description: This will sync the production build to the s3 bucket.
     steps:
-      - run: ls
       - attach_workspace:
           at: .
-      - run: ls
+      - aws-s3/sync:
+          arguments: --delete
+          from: ./build
+          to: s3://kanji.olawalekoiki.co.uk
 jobs:
   build-app:
     executor: node/default
