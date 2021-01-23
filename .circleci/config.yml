@@ -6,7 +6,7 @@ commands:
     description: This step will install the node packages.
     steps:
       - node/install-packages:
-          cache-key: package-lock.json
+          cache-key: "package-lock.json"
   build-production:
     description: This will create a production build.
     steps:
