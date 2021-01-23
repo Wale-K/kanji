@@ -28,6 +28,7 @@ jobs:
   deploy-app:
     executor: python/default
     steps:
+      - checkout
       - sync-to-bucket
 
 workflows:
