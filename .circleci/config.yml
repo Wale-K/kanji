@@ -1,7 +1,18 @@
 version: 2.1
 orbs:
   node: circleci/node@3.0.0
+commands:
+  installNodeModules:
+    description: This step will install the node packages.
+    steps:
+      - run: ls
+jobs:
+  buildApp:
+    executor: node/default
+    steps:
+      - installNodeModules
 workflows:
-  node-tests:
+  version: 2
+  deployApp:
     jobs:
-      - node/test
+      - buildApp
