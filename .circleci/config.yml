@@ -5,10 +5,13 @@ commands:
   install-node-modules:
     description: This step will install the node packages.
     steps:
-      - node/install-packages
-  build-app:
+      - node/install-packages:
+          cache-key: package-lock.json
+  build-production:
     description: This will create a production build.
     steps:
+      - run: ls
+      - run: npm run build
       - run: ls
 jobs:
   build-app:
@@ -16,7 +19,7 @@ jobs:
     steps:
       - checkout
       - install-node-modules
-      - build-app
+      - build-production
 workflows:
   version: 2
   deploy-app:
