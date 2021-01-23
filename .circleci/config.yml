@@ -43,7 +43,13 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - build-app
+      - build-app:
+          filters:
+            branches:
+              only: master
       - deploy-app:
           requires:
             - build-app
+          filters:
+            branches:
+              only: master
