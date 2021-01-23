@@ -35,4 +35,6 @@ workflows:
   deploy:
     jobs:
       - build-app
-      - deploy-app
+      - deploy-app:
+          - requires:
+              - build-app
