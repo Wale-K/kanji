@@ -114,9 +114,6 @@ const KanjiCard = (props) => {
   return (
     <CardContainer display="flex">
       <CardThird borderRight="solid 1px #474747">
-        <TopBar>
-          {props.currentKanjiIndex + 1} of {props.allKanji.length}
-        </TopBar>
         <Headings>Kanji</Headings>
         <Kanji>{props.currentKanji.kanji}</Kanji>
         <ControlsDiv>

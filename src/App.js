@@ -1,10 +1,9 @@
 import React from "react";
 import "./App.css";
-import axios from "axios";
 import styled from "styled-components";
 import KanjiCard from "./components/KanjiCard";
 import TestCard from "./components/TestCard";
-import { getKanjiFromGrade, getCurrentKanjiInfo } from "./services/endpoints";
+import { generateKanji, generateKanjiGrade } from "./services/endpoints";
 
 const Card = styled.div`
   display: ${(props) => props.display};
@@ -20,21 +19,19 @@ class App extends React.Component {
     toggleTestMode: true,
     selectedGrades: [1],
     gradeInUse: 1,
-    length: 0,
   };
 
   // generates a randomly selected kanji grade from current grades in operation.
-  generateGrade = () => {
+  handleGenerateGrade = () => {
     let grade = Math.floor(Math.random() * this.state.selectedGrades.length);
     return this.state.selectedGrades[grade];
   };
 
   // the page starts at grade 1 and updates the state so allKanji are the grade 1 kanji.
   componentDidMount = () => {
-    getKanjiFromGrade(this.generateGrade()).then((response) => {
+    generateKanjiGrade(this.handleGenerateGrade()).then((response) => {
       this.setState({
         allKanji: response.data,
-        length: response.data.length,
       });
     });
 
@@ -44,17 +41,20 @@ class App extends React.Component {
   // this sets the first kanji of the grade 1 kanji to be the currentKanji.
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.currentKanji === null) {
-      getCurrentKanjiInfo(
-        this.state.allKanji[this.state.currentKanjiIndex]
-      ).then((response) => {
-        this.setState({
-          currentKanji: response.data,
-          currentGrade: response.data.grade,
-        });
-      });
+      generateKanji(this.state.allKanji[this.state.currentKanjiIndex]).then(
+        (response) => {
+          this.setState({
+            currentKanji: response.data,
+            currentGrade: response.data.grade,
+          });
+        }
+      );
     }
   };
 
+  // this toggles the selected grades.
+  // there has to be at least 1 selected grade.
+  // if all the grades are selected then they all change colour and the "all" button is highlighted.
   gradeOnOffSwitch = (gradeValue) => () => {
     const { selectedGrades } = this.state;
 
@@ -82,33 +82,27 @@ class App extends React.Component {
   };
 
   generateRandomKanjiFromCurrentGrade = () => {
-    const gradeBeingUsed = this.generateGrade();
+    const gradeBeingUsed = this.handleGenerateGrade();
 
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/grade-${gradeBeingUsed}`)
+    generateKanjiGrade(gradeBeingUsed)
       .then((response) => {
         this.setState({
           allKanji: response.data,
           gradeInUse: gradeBeingUsed,
-          length: response.data.length,
         });
       })
       .then(() => {
         const randomKanji = Math.floor(
           Math.random() * this.state.allKanji.length
         );
-        axios
-          .get(
-            `https://kanjiapi.dev/v1/kanji/${this.state.allKanji[randomKanji]}`
-          )
-          .then((response) => {
-            this.setState({
-              currentKanji: response.data,
-              currentKanjiIndex: randomKanji,
-            });
+
+        generateKanji(this.state.allKanji[randomKanji]).then((response) => {
+          this.setState({
+            currentKanji: response.data,
+            currentKanjiIndex: randomKanji,
           });
+        });
       });
-    console.log("second");
   };
 
   // this generates the next kanji of the current grade in use.
@@ -117,158 +111,95 @@ class App extends React.Component {
       this.allKanji !== null &&
       this.state.currentKanjiIndex < this.state.allKanji.length - 1
     ) {
-      axios
-        .get(
-          `https://kanjiapi.dev/v1/kanji/${
-            this.state.allKanji[this.state.currentKanjiIndex + 1]
-          }`
-        )
-        .then((response) => {
+      generateKanji(this.state.allKanji[this.state.currentKanjiIndex + 1]).then(
+        (response) => {
           this.setState((prevState) => {
             return {
               currentKanji: response.data,
               currentKanjiIndex: prevState.currentKanjiIndex + 1,
             };
           });
-        });
-      console.log("clicked up");
+        }
+      );
     }
   };
 
   // this generates the previous kanji of the current grade in use.
   handleKanjiDecrement = () => {
     if (this.state.allKanji !== null && this.state.currentKanjiIndex !== 0) {
-      axios
-        .get(
-          `https://kanjiapi.dev/v1/kanji/${
-            this.state.allKanji[this.state.currentKanjiIndex - 1]
-          }`
-        )
-        .then((response) => {
+      generateKanji(this.state.allKanji[this.state.currentKanjiIndex - 1]).then(
+        (response) => {
           this.setState((prevState) => {
             return {
               currentKanji: response.data,
               currentKanjiIndex: prevState.currentKanjiIndex - 1,
             };
           });
-        });
-      console.log("clicked down");
+        }
+      );
     }
   };
 
   // this makes the currently displayed kanji jump to the start of the current grade.
   handleKanjiStart = () => {
-    axios
-      .get(`https://kanjiapi.dev/v1/kanji/grade-${this.state.gradeInUse}`)
-      .then((response) => {
-        this.setState({ allKanji: response.data });
-      });
+    generateKanjiGrade(this.state.gradeInUse).then((response) => {
+      this.setState({ allKanji: response.data });
+    });
 
     if (this.state.allKanji !== null) {
-      axios
-        .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[0]}`)
-        .then((response) => {
-          this.setState({
-            currentKanji: response.data,
-            currentKanjiIndex: 0,
-          });
+      generateKanji(this.state.allKanji[0]).then((response) => {
+        this.setState({
+          currentKanji: response.data,
+          currentKanjiIndex: 0,
         });
-      console.log("clicked down");
+      });
     }
   };
 
   // this makes the currently displayed kanji jump to the end of the current grade.
   handleKanjiEnd = () => {
     if (this.state.allKanji !== null) {
-      axios
-        .get(
-          `https://kanjiapi.dev/v1/kanji/${
-            this.state.allKanji[this.state.allKanji.length - 1]
-          }`
-        )
-        .then((response) => {
+      generateKanji(this.state.allKanji[this.state.allKanji.length - 1]).then(
+        (response) => {
           this.setState({
             currentKanji: response.data,
             currentKanjiIndex: this.state.allKanji.length - 1,
           });
-        });
-
-      console.log("clicked up");
+        }
+      );
     }
   };
 
-  // this toggles the grade you are currently viewing. You can only view one grade at a time.
-
-  // toggleGrade = (grade) => {
-  //   axios
-  //     .get(`https://kanjiapi.dev/v1/kanji/grade-${grade}`)
-  //     .then((response) => {
-  //       this.setState({
-  //         allKanji: response.data,
-  //         length: response.data.length,
-  //       });
-  //     });
-  //   axios
-  //     .get(`https://kanjiapi.dev/v1/kanji/${this.state.allKanji[0]}`)
-  //     .then((response) => {
-  //       this.setState({
-  //         currentKanji: response.data,
-  //       });
-  //     });
-  // };
-
-  // WIP function that generates a random kanji and removes it from the
-  // potential to be generated again once viewed. So you don't get repition of kanji.
-
-  handleKanjiSearch = (event) => {
+  handleKanjiSearch = (event) =>
     this.setState({
       searchInputValue: event.target.value,
     });
-  };
 
   handleKanjiSearchSubmit = () => {
     if (this.state.searchInputValue !== "") {
-      axios
-        .get(`https://kanjiapi.dev/v1/kanji/${this.state.searchInputValue}`)
-        .then((response) => {
-          this.setState({
-            currentKanji: response.data,
-            searchInputValue: "",
-          });
+      generateKanji(this.state.searchInputValue).then((response) => {
+        this.setState({
+          currentKanji: response.data,
+          searchInputValue: "",
         });
-      axios
-        .get(
-          `https://kanjiapi.dev/v1/kanji/grade-${this.state.currentKanji.grade}`
-        )
-        .then((response) => {
-          this.setState((prevState) => ({
-            currentKanjiIndex: -1,
-          }));
-        });
+      });
+      generateKanjiGrade(this.state.currentKanji.grade).then((response) => {
+        this.setState((prevState) => ({
+          currentKanjiIndex: -1,
+        }));
+      });
     }
   };
 
-  handleToggleCard = () => {
-    this.setState((prevState) => {
-      return { cardToggle: !prevState.cardToggle };
-    });
+  handleToggleCard = () =>
+    this.setState((prevState) => ({
+      cardToggle: !prevState.cardToggle,
+    }));
 
-    // The below can be written as the above
-
-    // if (this.state.cardToggle) {
-    //   this.setState({ cardToggle: false });
-    // } else {
-    //   this.setState({ cardToggle: true });
-    // }
-  };
-
-  handleToggleTestMode = () => {
-    if (this.state.toggleTestMode) {
-      this.setState({ toggleTestMode: false });
-    } else {
-      this.setState({ toggleTestMode: true });
-    }
-  };
+  handleToggleTestMode = () =>
+    this.setState((prevState) => ({
+      toggleTestMode: !prevState.toggleTestMode,
+    }));
 
   handleKeyPresses = (event) => {
     if (event.keyCode === 13) {
@@ -340,44 +271,42 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Card display={this.state.cardToggle ? "block" : "none"}>
-          <KanjiCard
-            allKanji={this.state.allKanji ? this.state.allKanji : ""}
-            currentKanji={
-              this.state.currentKanji ? this.state.currentKanji : ""
-            }
-            incrementKanji={this.handleKanjiIncrement}
-            decrementKanji={this.handleKanjiDecrement}
-            randomKanji={this.generateRandomKanjiFromCurrentGrade}
-            toggleGrade={this.toggleGrade}
-            kanjiSearch={this.handleKanjiSearch}
-            kanjiSearchSubmit={this.handleKanjiSearchSubmit}
-            kanjiStart={this.handleKanjiStart}
-            kanjiEnd={this.handleKanjiEnd}
-            toggleCard={this.handleToggleCard}
-            gradeOnOffSwitch={this.gradeOnOffSwitch}
-            grades={this.state.grades}
-            selectedGrades={this.state.selectedGrades}
-            currentKanjiIndex={
-              this.state.allKanji ? this.state.currentKanjiIndex : ""
-            }
-          />
-        </Card>
-        <Card display={this.state.cardToggle ? "none" : "block"}>
-          <TestCard
-            toggleCard={this.handleToggleCard}
-            toggleTestMode={this.state.toggleTestMode}
-            handleToggleTestMode={this.handleToggleTestMode}
-            allKanji={this.state.allKanji ? this.state.allKanji : ""}
-            currentKanji={
-              this.state.currentKanji ? this.state.currentKanji : ""
-            }
-            randomKanji={this.generateRandomKanjiFromCurrentGrade}
-            grades={this.state.grades}
-            gradeOnOffSwitch={this.gradeOnOffSwitch}
-            selectedGrades={this.state.selectedGrades}
-          />
-        </Card>
+        {/* <Card display={this.state.cardToggle ? "block" : "none"}> */}
+        <KanjiCard
+          display={this.state.cardToggle ? "block" : "none"}
+          allKanji={this.state.allKanji ? this.state.allKanji : ""}
+          currentKanji={this.state.currentKanji ? this.state.currentKanji : ""}
+          incrementKanji={this.handleKanjiIncrement}
+          decrementKanji={this.handleKanjiDecrement}
+          randomKanji={this.generateRandomKanjiFromCurrentGrade}
+          toggleGrade={this.toggleGrade}
+          kanjiSearch={this.handleKanjiSearch}
+          kanjiSearchSubmit={this.handleKanjiSearchSubmit}
+          kanjiStart={this.handleKanjiStart}
+          kanjiEnd={this.handleKanjiEnd}
+          toggleCard={this.handleToggleCard}
+          gradeOnOffSwitch={this.gradeOnOffSwitch}
+          grades={this.state.grades}
+          selectedGrades={this.state.selectedGrades}
+          currentKanjiIndex={
+            this.state.allKanji ? this.state.currentKanjiIndex : ""
+          }
+        />
+        {/* </Card> */}
+        {/* <Card display={this.state.cardToggle ? "none" : "block"}> */}
+        <TestCard
+          display={this.state.cardToggle ? "none" : "block"}
+          toggleCard={this.handleToggleCard}
+          toggleTestMode={this.state.toggleTestMode}
+          handleToggleTestMode={this.handleToggleTestMode}
+          allKanji={this.state.allKanji ? this.state.allKanji : ""}
+          currentKanji={this.state.currentKanji ? this.state.currentKanji : ""}
+          randomKanji={this.generateRandomKanjiFromCurrentGrade}
+          grades={this.state.grades}
+          gradeOnOffSwitch={this.gradeOnOffSwitch}
+          selectedGrades={this.state.selectedGrades}
+        />
+        {/* </Card> */}
       </div>
     );
   }

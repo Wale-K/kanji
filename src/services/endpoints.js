@@ -1,9 +1,10 @@
 import axios from "axios";
+const KANJI_API_URL = "https://kanjiapi.dev/v1/kanji";
 
-export const getKanjiFromGrade = (grade) => {
-  return axios.get(`https://kanjiapi.dev/v1/kanji/grade-${grade}`);
+export const generateKanjiGrade = (grade) => {
+  return axios.get(`${KANJI_API_URL}/grade-${grade}`);
 };
 
-export const getCurrentKanjiInfo = (kanji) => {
-  return axios.get(`https://kanjiapi.dev/v1/kanji/${kanji}`);
+export const generateKanji = (kanji) => {
+  return axios.get(`${KANJI_API_URL}/${kanji}`);
 };
