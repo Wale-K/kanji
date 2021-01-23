@@ -8,14 +8,20 @@ commands:
     description: This step will install the node packages.
     steps:
       - node/install-packages
-        # cache-key: "package-lock.json"
+        cache-path: node-modules
   build-production:
     description: This will create a production build.
     steps:
       - run: npm run build
+      - persist_to_workspace:
+          root: .
+          paths: build
   sync-to-bucket:
     description: This will sync the production build to the s3 bucket.
     steps:
+      - run: ls
+      - attach_workspace:
+          at: .
       - run: ls
 jobs:
   build-app:
