@@ -5,16 +5,18 @@ commands:
   install-node-modules:
     description: This step will install the node packages.
     steps:
-      - run: ls
       - node/install-packages
+  build-app:
+    description: This will create a production build.
+    steps:
       - run: ls
-
 jobs:
   build-app:
     executor: node/default
     steps:
       - checkout
       - install-node-modules
+      - build-app
 workflows:
   version: 2
   deploy-app:
