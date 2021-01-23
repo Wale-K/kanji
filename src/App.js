@@ -1,13 +1,8 @@
 import React from "react";
 import "./App.css";
-import styled from "styled-components";
 import KanjiCard from "./components/KanjiCard";
 import TestCard from "./components/TestCard";
 import { generateKanji, generateKanjiGrade } from "./services/endpoints";
-
-const Card = styled.div`
-  display: ${(props) => props.display};
-`;
 
 class App extends React.Component {
   state = {
@@ -15,7 +10,7 @@ class App extends React.Component {
     currentKanji: null,
     currentKanjiIndex: 0,
     searchInputValue: "",
-    cardToggle: true,
+    displayStudy: true,
     toggleTestMode: true,
     selectedGrades: [1],
     gradeInUse: 1,
@@ -193,7 +188,7 @@ class App extends React.Component {
 
   handleToggleCard = () =>
     this.setState((prevState) => ({
-      cardToggle: !prevState.cardToggle,
+      displayStudy: !prevState.displayStudy,
     }));
 
   handleToggleTestMode = () =>
@@ -232,48 +227,13 @@ class App extends React.Component {
     if (event.keyCode === 82) {
       this.handleToggleTestMode();
     }
-
-    // TODO: Fix these so when you press the number on the keyboard the grade is toggled on/off.
-
-    // if (event.keyCode === 49) {
-    //   this.gradeOnOffSwitch(1);
-    // }
-
-    // if (event.keyCode === 50) {
-    //   this.gradeOnOffSwitch(2);
-    // }
-
-    // if (event.keyCode === 51) {
-    //   this.gradeOnOffSwitch(3);
-    // }
-
-    // if (event.keyCode === 52) {
-    //   this.gradeOnOffSwitch(4);
-    // }
-
-    // if (event.keyCode === 53) {
-    //   this.gradeOnOffSwitch(5);
-    // }
-
-    // if (event.keyCode === 54) {
-    //   this.gradeOnOffSwitch(6);
-    // }
-
-    // if (event.keyCode === 56) {
-    //   this.gradeOnOffSwitch(8);
-    // }
-
-    // if (event.keyCode === 48) {
-    //   this.gradeOnOffSwitch(0);
-    // }
   };
 
   render() {
     return (
-      <div>
-        {/* <Card display={this.state.cardToggle ? "block" : "none"}> */}
+      <>
         <KanjiCard
-          display={this.state.cardToggle ? "block" : "none"}
+          displayStudy={this.state.displayStudy}
           allKanji={this.state.allKanji ? this.state.allKanji : ""}
           currentKanji={this.state.currentKanji ? this.state.currentKanji : ""}
           incrementKanji={this.handleKanjiIncrement}
@@ -292,10 +252,8 @@ class App extends React.Component {
             this.state.allKanji ? this.state.currentKanjiIndex : ""
           }
         />
-        {/* </Card> */}
-        {/* <Card display={this.state.cardToggle ? "none" : "block"}> */}
         <TestCard
-          display={this.state.cardToggle ? "none" : "block"}
+          display={!this.state.displayStudy}
           toggleCard={this.handleToggleCard}
           toggleTestMode={this.state.toggleTestMode}
           handleToggleTestMode={this.handleToggleTestMode}
@@ -306,8 +264,7 @@ class App extends React.Component {
           gradeOnOffSwitch={this.gradeOnOffSwitch}
           selectedGrades={this.state.selectedGrades}
         />
-        {/* </Card> */}
-      </div>
+      </>
     );
   }
 }
