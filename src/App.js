@@ -1,11 +1,9 @@
 import React from "react";
 import "./App.css";
 import axios from "axios";
-
 import styled from "styled-components";
 import KanjiCard from "./components/KanjiCard";
 import TestCard from "./components/TestCard";
-import update from "immutability-helper"; // remove this.
 
 const Card = styled.div`
   display: ${(props) => props.display};
@@ -352,7 +350,6 @@ class App extends React.Component {
             decrementKanji={this.handleKanjiDecrement}
             randomKanji={this.generateRandomKanjiFromCurrentGrade}
             toggleGrade={this.toggleGrade}
-            test={this.test}
             kanjiSearch={this.handleKanjiSearch}
             kanjiSearchSubmit={this.handleKanjiSearchSubmit}
             kanjiStart={this.handleKanjiStart}
