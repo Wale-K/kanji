@@ -6,7 +6,7 @@ import { ThirdThird } from "./ThirdThird";
 
 const TestCard = (props) => {
   return (
-    <CardContainer display={props.display ? "flex" : "none"}>
+    <CardContainer display={props.display ? "flex" : "none"} direction="column">
       <FirstThird
         display="flex"
         handleToggleTestMode={props.handleToggleTestMode}

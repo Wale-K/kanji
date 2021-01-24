@@ -1,5 +1,4 @@
 import React from "react";
-
 import { CardContainer } from "../StyledComponents";
 import { FirstThird } from "./FirstThird";
 import { SecondThird } from "./SecondThird";

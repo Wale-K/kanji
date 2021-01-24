@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const CardContainer = styled.div`
   display: ${(props) => props.display};
+  flex-direction: ${(props) => props.direction};
   height: calc(100vh - 4rem);
   border: solid 1px #474747;
   margin: 2rem;
