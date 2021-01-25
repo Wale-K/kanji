@@ -21,6 +21,7 @@ const KanjiCard = (props) => {
         gradeOnOffSwitch={props.gradeOnOffSwitch}
         currentKanji={props.currentKanji}
         toggleCard={props.toggleCard}
+        kanjiSearchSubmit={props.kanjiSearchSubmit}
       />
     </CardContainer>
   );
