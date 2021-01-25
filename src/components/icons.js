@@ -9,7 +9,7 @@ export const start = (
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
-    classname="svg-inline--fa fa-fast-backward fa-w-16"
+    className="svg-inline--fa fa-fast-backward fa-w-16"
   >
     <path
       fill="currentColor"
@@ -27,7 +27,7 @@ export const decrement = (
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
-    classname="svg-inline--fa fa-backward fa-w-16"
+    className="svg-inline--fa fa-backward fa-w-16"
   >
     <path
       fill="currentColor"
@@ -45,7 +45,7 @@ export const increment = (
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
-    classname="svg-inline--fa fa-forward fa-w-16"
+    className="svg-inline--fa fa-forward fa-w-16"
   >
     <path
       fill="currentColor"
@@ -63,7 +63,7 @@ export const end = (
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
-    classname="svg-inline--fa fa-fast-forward fa-w-16"
+    className="svg-inline--fa fa-fast-forward fa-w-16"
   >
     <path
       fill="currentColor"
@@ -81,7 +81,7 @@ export const random = (
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 384 512"
-    classname="svg-inline--fa fa-question fa-w-12"
+    className="svg-inline--fa fa-question fa-w-12"
   >
     <path
       fill="currentColor"

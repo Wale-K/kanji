@@ -49,7 +49,7 @@ export const FirstThird = (props) => {
       <Headings>Kanji</Headings>
       <Kanji>{props.currentKanji.kanji}</Kanji>
       <ControlsDiv>
-        <svg onkeypress={props.kanjiStart} onClick={props.kanjiStart}>
+        <svg onKeyPress={props.kanjiStart} onClick={props.kanjiStart}>
           {start}
         </svg>
         <svg onClick={props.decrementKanji}>{decrement}</svg>
