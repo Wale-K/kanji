@@ -251,6 +251,7 @@ class App extends React.Component {
           currentKanjiIndex={
             this.state.allKanji ? this.state.currentKanjiIndex : ""
           }
+          gradeInUse={this.state.gradeInUse}
         />
         <TestCard
           display={!this.state.displayStudy}

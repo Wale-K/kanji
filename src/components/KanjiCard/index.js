@@ -23,6 +23,7 @@ const KanjiCard = (props) => {
         toggleCard={props.toggleCard}
         kanjiSearchSubmit={props.kanjiSearchSubmit}
         kanjiSearch={props.kanjiSearch}
+        gradeInUse={props.gradeInUse}
       />
     </CardContainer>
   );

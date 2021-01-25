@@ -84,6 +84,8 @@ export const ThirdThird = (props) => {
       </AllButtons>
 
       <div>
+        <Headings>Grade In Use</Headings>
+        <p>{props.gradeInUse}</p>
         <Headings>JLPT</Headings>
         <p>{props.currentKanji.jlpt}</p>
         <Headings>Grade</Headings>
